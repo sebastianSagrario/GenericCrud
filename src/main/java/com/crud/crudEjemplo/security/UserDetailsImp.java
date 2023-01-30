@@ -8,9 +8,12 @@ import com.crud.crudEjemplo.entities.User;
 import com.crud.crudEjemplo.enums.Role;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +25,24 @@ public class UserDetailsImp implements UserDetails {
     public UserDetailsImp(User user) {
         this.user = user;
     }
-        
+
+    
+//    	private static Set<? extends GrantedAuthority> getAuthorities(User retrievedUser) {
+//		
+//		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+//		authorities.add(new SimpleGrantedAuthority("ROLE_" + retrievedUser.getRole())));
+//		return authorities;
+//	}
     
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+       	authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        return authorities;
     }
 
+    
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -58,6 +71,10 @@ public class UserDetailsImp implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Role getRole() {
+        return user.getRole();
     }
     
 }
